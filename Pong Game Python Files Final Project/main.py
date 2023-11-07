@@ -31,7 +31,7 @@ pygame.display.set_caption('Pong Game')
 #running variable
 running=True
 #title text
-title_text=text('Pong Game',200,250,36,(255,255,255))
+title_text=text('Pong Game',250,250,36,(255,255,255))
 
 #### The Loop
 while running:
