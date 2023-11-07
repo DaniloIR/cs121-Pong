@@ -31,12 +31,12 @@ pygame.display.set_caption('Pong Game')
 #running variable
 running=True
 #title text
-title_text=text('Pong Game',200,250,36,(255,255,255))
+title_text=text('Pong Game',250,250,36,(255,255,255))
 
 #### The Loop
 while running:
     screen.fill((0,0,255))
-    screen.blit(title_text,(250,200))
+    screen.blit(title_text,(300,100))
     for event in pygame.event.get():
         if event.type==pygame.QUIT:
             running=False

@@ -15,3 +15,4 @@ def text (txt,x,y,size,clr):
     #text variable, string, anti-aliasing true, color
     text=font.render(str(txt),True,clr)
     return text
+
