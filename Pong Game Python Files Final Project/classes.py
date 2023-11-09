@@ -57,8 +57,10 @@ class GameState :
         # Game State for iunstructions button
         if self.GameState == 3 : 
             screen.fill((28, 17, 240))
-            text( "RULES: \n 1: Each player gets 1 paddle on each side of the screen which can be controlled with either: (W & S) or (I and K) \n 2: The object of the game is to keep the ball from hitting your side of the screen before it hits the paddle; this will result in a point for the other team \n 3: The first player to get to a score of 21 wins! \n 4: There will be power-ups and other fun challenges hidden within the game \n 5: Have Fun!
-            ", 400, 500, 30, (255, 255, 255) )
+            rules_text = text("RULES: \n 1: Each player gets 1 paddle on each side of the screen which can be controlled with either: (W & S) or (I and K) \n 2: The object of the game is to keep the ball from hitting your side of the screen before it hits the paddle; this will result in a point for the other team \n 3: The first player to get to a score of 21 wins! \n 4: There will be power-ups and other fun challenges hidden within the game \n 5: Have Fun!"
+            , 200, 200, 30, (255, 255, 255) )
+            screen.blit(rules_text, (200,200))
+            
                   
     
     def changestate(self, num): 
