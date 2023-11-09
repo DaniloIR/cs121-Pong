@@ -35,4 +35,27 @@ class Button:
         #always run the mouseMoved method
         self.mouseMoved()
 
+# Game state class
+class GameState : 
+    def __init__(self, GameState) :
+        self.GameState = GameState
+        self.title_text = text('Pong Game',250,250,36,(255,255,255))
+        self.play_button = Button(100,400,(255,0,255),'Play',200,50)
+        self.instructions_button = Button(550,400,(0,255,0),'Instructions',200,50)
+    
+    def run(self, screen) :
+        if self.GameState == 1 : 
+            screen.fill((0,0,0))
+            self.play_button.draw(screen)
+            self.instructions_button.draw(screen)
+            screen.blit(self.title_text,(300,100))
+
+        if self.GameState == 2 : 
+            screen.fill((21, 230, 52))
+        
+        if self.GameState == 3 : 
+            screen.fill((28, 17, 240))
+    
+    def changestate(self, num): 
+        self.GameState = num
 
