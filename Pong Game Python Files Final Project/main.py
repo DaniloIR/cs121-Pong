@@ -31,13 +31,22 @@ pygame.display.set_caption('Pong Game')
 #running variable
 running=True
 #title text
-title_text=text('Pong Game',200,250,36,(255,255,255))
-
+GameState = GameState(1)
+title_text=text('Pong Game',250,250,36,(0,0,0))
+title_text=text('Pong Game',250,250,36,(250,250,250))
+play_button=Button(100,400,(255,0,255),'Play',200,50)
+instructions_button=Button(550,400,(0,255,0),'Instructions',200,50)
 #### The Loop
 while running:
-    screen.fill((0,0,255))
-    screen.blit(title_text,(250,200))
+    GameState.run(screen)
     for event in pygame.event.get():
         if event.type==pygame.QUIT:
             running=False
+        #added mousebuttondown event so the buttons register the click
+        if event.type==pygame.MOUSEBUTTONDOWN:
+            if GameState.play_button.mouseMoved()==True:
+                GameState.changestate(2)
+            if GameState.instructions_button.mouseMoved()==True:
+                GameState.changestate(3)
     pygame.display.update()
+
