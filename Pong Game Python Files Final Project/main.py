@@ -48,5 +48,18 @@ while running:
                 GameState.changestate(2)
             if GameState.instructions_button.mouseMoved()==True:
                 GameState.changestate(3)
+                screen.fill((28, 17, 240))
+                rules_txt = text('''
+                RULES: 1: Each player gets 1 paddle on each side of the screen 
+                which can be controlled with either: (W & S) or (I and K) 
+                2: The object of the game is to keep the ball from hitting your 
+                side of the screen before it hits the paddle; this will result in 
+                a point for the other team 3: The first player to get to a 
+                score of 21 wins! 
+                4: There will be power-ups and other fun challenges hidden within 
+                the game 5: Have Fun!
+                ''', 5, 10, 15, (255, 255, 255))
+                screen.blit(rules_txt, (5, 10) )
+            
     pygame.display.update()
 
