@@ -42,7 +42,8 @@ class GameState :
         self.title_text = text('Pong Game',250,250,36,(255,255,255))
         self.play_button = Button(100,400,(255,0,255),'Play',200,50)
         self.instructions_button = Button(550,400,(0,255,0),'Instructions',200,50)
-    
+        self.paddle1=Paddle(200,100,10,(255,0,0),10,100)
+        self.paddle2=Paddle(600,100,10,(0,0,255),10,100)
     def run(self, screen) :
         if self.GameState == 1 : 
             screen.fill((0,0,0))
@@ -52,13 +53,23 @@ class GameState :
             
         # Game State for Play Button
         if self.GameState == 2 : 
+            
             screen.fill((21, 230, 52))
-
+            self.paddle1.draw(screen)
+            self.paddle2.draw(screen)
+            pygame.display.update()
         # Game State for iunstructions button
-            
-            
-                  
-    
     def changestate(self, num): 
         self.GameState = num
+class Paddle:
+    def __init__(self,x,y,size,clr,width,height):
+        self.x=x
+        self.y=y
+        self.size=size
+        self.clr=clr
+        self.width=width
+        self.height=height
+        self.rect=pygame.Rect(self.x,self.y,self.width,self.height)
+    def draw(self,screen):
+        pygame.draw.rect(screen,self.clr,self.rect,self.width)
 

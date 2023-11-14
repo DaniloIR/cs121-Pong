@@ -42,6 +42,8 @@ while running:
     for event in pygame.event.get():
         if event.type==pygame.QUIT:
             running=False
+        #event type for keyboard button press
+
         #added mousebuttondown event so the buttons register the click
         if event.type==pygame.MOUSEBUTTONDOWN:
             if GameState.play_button.mouseMoved()==True:
