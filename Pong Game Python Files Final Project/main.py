@@ -51,17 +51,38 @@ while running:
             if GameState.instructions_button.mouseMoved()==True:
                 GameState.changestate(3)
                 screen.fill((28, 17, 240))
-                rules_txt = text('''
-                RULES: 1: Each player gets 1 paddle on each side of the screen 
-                which can be controlled with either: (W & S) or (I and K) 
-                2: The object of the game is to keep the ball from hitting your 
-                side of the screen before it hits the paddle; this will result in 
-                a point for the other team 3: The first player to get to a 
-                score of 21 wins! 
-                4: There will be power-ups and other fun challenges hidden within 
-                the game 5: Have Fun!
-                ''', 5, 10, 15, (255, 255, 255))
-                screen.blit(rules_txt, (5, 10) )
+                rules_txt_1 = text(' RULES: ', 5, 10, 25, (255, 255, 255))
+                rules_txt_2 = text(' 1: Each player gets 1 paddle on each side of the screen. ', 5, 10, 25, (255, 255, 255))
+                rules_txt_3 = text(' This can be controlled with either the (W & S) or (I and K) keys ', 5, 10, 25, (255, 255, 255))
+                rules_txt_4 = text(' 2: The object of the game is to keep the ball from hitting your  ', 5, 10, 25, (255, 255, 255))
+                rules_txt_5 = text(' side of the screen before it hits the paddle; this will result in   ', 5, 10, 25, (255, 255, 255))
+                rules_txt_6 = text(' a point for the other team   ', 5, 10, 25, (255, 255, 255))
+                rules_txt_7 = text(' 3: The first player to get to a score of 21 wins!   ', 5, 10, 25, (255, 255, 255))
+                rules_txt_8 = text(' 4: There will be power-ups and other fun challenges hidden   ', 5, 10, 25, (255, 255, 255))
+                rules_txt_9 = text(' within the game so.. watch out!  ', 5, 10, 25, (255, 255, 255))
+                rules_txt_10 = text(' Good Luck and Have Fun!!  ', 5, 10, 25, (255, 255, 255))
+
+                screen.blit(rules_txt_1, (350, 10) )
+                screen.blit(rules_txt_2, (5, 50) )
+                screen.blit(rules_txt_3, (5, 80) )
+                screen.blit(rules_txt_4, (5, 110) )
+                screen.blit(rules_txt_5, (5, 140) )
+                screen.blit(rules_txt_6, (5, 170) )
+                screen.blit(rules_txt_7, (5, 200) )
+                screen.blit(rules_txt_8, (5, 230) )
+                screen.blit(rules_txt_9, (5, 260) )
+                screen.blit(rules_txt_10, (250, 310) )
+
+        
+                
+                #2: The object of the game is to keep the ball from hitting your 
+
+                #side of the screen before it hits the paddle; this will result in 
+
+                #a point for the other team 3: The first player to get to a 
+                #score of 21 wins! 
+                #4: There will be power-ups and other fun challenges hidden within 
+                #the game 5: Have Fun!
             
     pygame.display.update()
 
