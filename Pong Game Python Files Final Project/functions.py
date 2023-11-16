@@ -47,32 +47,33 @@ def text (txt,x,y,size,clr):
     #text variable, string, anti-aliasing true, color
     text=font.render(str(txt),True,clr)
     return text
-
-
+#Game state for main menu
 def menu(screen,clock):
     running= True
+    #title text, play button and instructions button
     title_text=text('Pong Game',250,250,36,(0,0,0))
     title_text=text('Pong Game',250,250,36,(250,250,250))
     play_button=Button(100,400,(255,0,255),'Play',200,50)
     instructions_button=Button(550,400,(0,255,0),'Instructions',200,50)
+    #while loop for screen drawing
     while running==True:
+        #fill the screen with a blue color, draw the buttons and text
         screen.fill((0,0,255))
         play_button.draw(screen)
         instructions_button.draw(screen)
         screen.blit(title_text,(300,100))
         clock.tick(60)
         pygame.display.update()
+        #button click events
         for event in pygame.event.get():
             if event.type==pygame.MOUSEBUTTONDOWN:
                 if play_button.mouseMoved():
                     return 'Game'
                 if instructions_button.mouseMoved():
                     return 'Instructions'
-                
             if event.type==pygame.QUIT:
                 running=False
    
-    #return 'Menu'
 def game(screen,clock):
     running=True
     while running==True:
@@ -82,42 +83,38 @@ def game(screen,clock):
         for event in pygame.event.get():
             if event.type==pygame.QUIT:
                 running=False
-def instructions(screen,clock):
-    running=True
-    while running==True:
-        screen.fill((255,0,0))
-        clock.tick(60)
-        pygame.display.update()
-        for event in pygame.event.get():
-            if event.type==pygame.QUIT:
-                running=False
-
-
-
-
-
-
-
-
 
 def instructions (screen, clock) : 
-    while running:
-        GameState.run(screen)
+    running=True
+    home_button=Button(200,500,(0,255,0),'Home',150,50)
+    rules_txt_1 = text(' RULES: ', 5, 10, 25, (255, 255, 255))
+    rules_txt_2 = text(' 1: Each player gets 1 paddle on each side of the screen. ', 5, 10, 25, (255, 255, 255))
+    rules_txt_3 = text(' This can be controlled with either the (W & S) or (I and K) keys ', 5, 10, 25, (255, 255, 255))
+    rules_txt_4 = text(' 2: The object of the game is to keep the ball from hitting your  ', 5, 10, 25, (255, 255, 255))
+    rules_txt_5 = text(' side of the screen before it hits the paddle; this will result in   ', 5, 10, 25, (255, 255, 255))
+    rules_txt_6 = text(' a point for the other team   ', 5, 10, 25, (255, 255, 255))
+    rules_txt_7 = text(' 3: The first player to get to a score of 21 wins!   ', 5, 10, 25, (255, 255, 255))
+    rules_txt_8 = text(' 4: There will be power-ups and other fun challenges hidden   ', 5, 10, 25, (255, 255, 255))
+    rules_txt_9 = text(' within the game so.. watch out!  ', 5, 10, 25, (255, 255, 255))
+    rules_txt_10 = text(' Good Luck and Have Fun!!  ', 5, 10, 25, (255, 255, 255))
+    while running ==True:
+        screen.fill((28, 17, 240))
+        home_button.draw(screen)
+        screen.blit(rules_txt_1, (350, 10) )
+        screen.blit(rules_txt_2, (5, 50) )
+        screen.blit(rules_txt_3, (5, 80) )
+        screen.blit(rules_txt_4, (5, 110) )
+        screen.blit(rules_txt_5, (5, 140) )
+        screen.blit(rules_txt_6, (5, 170) )
+        screen.blit(rules_txt_7, (5, 200) )
+        screen.blit(rules_txt_8, (5, 230) )
+        screen.blit(rules_txt_9, (5, 260) )
+        screen.blit(rules_txt_10, (250, 310) )
+        pygame.display.update()
+        clock.tick(60)
         for event in pygame.event.get():
             if event.type==pygame.QUIT:
                 running=False
-     
-        if event.type==pygame.MOUSEBUTTONDOWN:
-            if GameState.play_button.mouseMoved()==True:
-                GameState.changestate(2)
-            if GameState.instructions_button.mouseMoved()==True:
-                GameState.changestate(3)
-                screen.fill((28, 17, 240))
-                rules_txt_1 = text(' RULES: ', 5, 10, 25, (255, 255, 255))
-                rules_txt_2 = text(' RULES: 1: Each player gets 1 paddle on each side of the screen. ', 5, 10, 25, (255, 255, 255))
-                rules_txt_3 = text(' This can be controlled with either the (W & S) or (I and K) keys ', 5, 10, 25, (255, 255, 255))
-                rules_txt_4 = text(' 2: The object of the game is to keep the ball from hitting your  ', 5, 10, 25, (255, 255, 255))
-                screen.blit(rules_txt_1, (200, 10) )
-                screen.blit(rules_txt_2, (5, 40) )
-                screen.blit(rules_txt_3, (5, 70) )
-                screen.blit(rules_txt_4, (5, 100) )
+            if event.type==pygame.MOUSEBUTTONDOWN:
+                if home_button.mouseMoved():
+                    return 'Menu'
