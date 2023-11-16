@@ -1,6 +1,7 @@
 #classes.py
 import pygame
 from functions import *
+
 #Button class for game buttons
 class Button:
     #init method with x,y,color,text,width,height. A rectangle uses pygame.rect, and text uses the text function
@@ -35,32 +36,6 @@ class Button:
         #always run the mouseMoved method
         self.mouseMoved()
 
-# Game state class
-class GameState : 
-    def __init__(self, GameState) :
-        self.GameState = GameState
-        self.title_text = text('Pong Game',250,250,36,(255,255,255))
-        self.play_button = Button(100,400,(255,0,255),'Play',200,50)
-        self.instructions_button = Button(550,400,(0,255,0),'Instructions',200,50)
-        self.paddle1=Paddle(200,100,10,(255,0,0),10,100)
-        self.paddle2=Paddle(600,100,10,(0,0,255),10,100)
-    def run(self, screen) :
-        if self.GameState == 1 : 
-            screen.fill((0,0,0))
-            self.play_button.draw(screen)
-            self.instructions_button.draw(screen)
-            screen.blit(self.title_text,(300,100))
-            
-        # Game State for Play Button
-        if self.GameState == 2 : 
-            
-            screen.fill((21, 230, 52))
-            self.paddle1.draw(screen)
-            self.paddle2.draw(screen)
-            pygame.display.update()
-        # Game State for iunstructions button
-    def changestate(self, num): 
-        self.GameState = num
 class Paddle:
     def __init__(self,x,y,size,clr,width,height):
         self.x=x
