@@ -2,11 +2,17 @@
 import pygame
 from classes import *
 import pygame
-'''
-#Text function to make displaying text simpler. 
- Arguments are text, x location, 
- y location, size, and color
-'''
+
+#ball class
+class Ball:
+    def __init__(self,x,y,clr,r):
+        self.x=x
+        self.y=y
+        self.clr=clr
+        self.r=r
+    def draw(self,screen):
+        pygame.draw.circle(screen,self.clr,(self.x,self.y),self.r)
+#button class for clicking and mouse moved
 class Button:
     #init method with x,y,color,text,width,height. A rectangle uses pygame.rect, and text uses the text function
     def __init__(self,x,y,clr,txt,w,h):
@@ -39,6 +45,11 @@ class Button:
         screen.blit(self.button_text,(self.x+45,self.y+5))
         #always run the mouseMoved method
         self.mouseMoved()
+'''
+#Text function to make displaying text simpler. 
+ Arguments are text, x location, 
+ y location, size, and color
+'''
 def text (txt,x,y,size,clr):
     #bring in screen variable
     screen = pygame.display.set_mode((800, 600))
@@ -51,14 +62,13 @@ def text (txt,x,y,size,clr):
 def menu(screen,clock):
     running= True
     #title text, play button and instructions button
-    title_text=text('Pong Game',250,250,36,(0,0,0))
-    title_text=text('Pong Game',250,250,36,(250,250,250))
+    title_text=text('Pong Game',300,300,36,(250,250,250))
     play_button=Button(100,400,(255,0,255),'Play',200,50)
     instructions_button=Button(550,400,(0,255,0),'Instructions',200,50)
     #while loop for screen drawing
     while running==True:
         #fill the screen with a blue color, draw the buttons and text
-        screen.fill((0,0,255))
+        screen.fill((0,0,0))
         play_button.draw(screen)
         instructions_button.draw(screen)
         screen.blit(title_text,(300,100))
@@ -73,20 +83,64 @@ def menu(screen,clock):
                     return 'Instructions'
             if event.type==pygame.QUIT:
                 running=False
-   
+#paddle class for game
+class Paddle:
+    def __init__(self,x,y,size,clr,width,height):
+        self.x=x
+        self.y=y
+        self.size=size
+        self.clr=clr
+        self.width=width
+        self.height=height
+        self.Ychange=0
+        self.rect=pygame.Rect(self.x,self.y,self.width,self.height)
+    def draw(self,screen):
+        self.y+=self.Ychange
+        pygame.draw.rect(screen,self.clr,self.rect,self.width)  
+#create 2 paddle objects
+paddle1=Paddle(100,200,10,(255,0,0),10,100)
+paddle2=Paddle(750,200,10,(0,255,0),10,100)
+#player 1 and 2 scores
+player1_score=0
+player2_score=0
+#create a ball object
+ball=Ball(400,200,(255,255,255),20)
+#game function for main game
 def game(screen,clock):
+    #player 1 and 2 scores as text to display
+    player1_score_text=text('Player 1 Score:'+str(player1_score),0,15,32,(255,255,255))
+    player2_score_text=text('Player 2 Score:'+str(player2_score),450,15,32,(255,255,255))
     running=True
+    #the loop
     while running==True:
+        #draw the ball, paddles, and score text
         screen.fill((0,0,0))
-        clock.tick(60)
-        pygame.display.update()
+        ball.draw(screen)
+        screen.blit(player1_score_text,(100,15))
+        screen.blit(player2_score_text,(500,15))
+        paddle1.draw(screen)
+        paddle2.draw(screen)
+        
+        #get the key inputs (we couldn't get this working. We tried adding a Y change to the paddles)
         for event in pygame.event.get():
             if event.type==pygame.QUIT:
                 running=False
-
+            if event.type==pygame.KEYDOWN:
+                if event.key==pygame.K_w:
+                    paddle1.Ychange+=15
+                if event.key==pygame.K_s:
+                    paddle1.Ychange-=15
+            if event.type==pygame.KEYUP:
+                 if event.key==pygame.K_w:
+                    paddle1.Ychange=0
+                 if event.key==pygame.K_s:
+                    paddle1.Ychange=0
+        clock.tick(60)
+        pygame.display.update()
+#instructions screen
 def instructions (screen, clock) : 
     running=True
-    home_button=Button(200,500,(0,255,0),'Home',150,50)
+    home_button=Button(300,450,(0,255,0),'Home',150,50)
     rules_txt_1 = text(' RULES: ', 5, 10, 25, (255, 255, 255))
     rules_txt_2 = text(' 1: Each player gets 1 paddle on each side of the screen. ', 5, 10, 25, (255, 255, 255))
     rules_txt_3 = text(' This can be controlled with either the (W & S) or (I and K) keys ', 5, 10, 25, (255, 255, 255))
@@ -98,7 +152,7 @@ def instructions (screen, clock) :
     rules_txt_9 = text(' within the game so.. watch out!  ', 5, 10, 25, (255, 255, 255))
     rules_txt_10 = text(' Good Luck and Have Fun!!  ', 5, 10, 25, (255, 255, 255))
     while running ==True:
-        screen.fill((28, 17, 240))
+        screen.fill((0,0,0))
         home_button.draw(screen)
         screen.blit(rules_txt_1, (350, 10) )
         screen.blit(rules_txt_2, (5, 50) )
