@@ -14,6 +14,8 @@ class Button:
         self.txt=txt
         self.rect=pygame.Rect(self.x,self.y,self.w,self.h)
         self.button_text=text(str(self.txt),self.x,self.y,25,(255,255,255))
+        self.surf=pygame.surface.Surface((self.w,self.h))
+        self.surf.fill(self.clr)
     #mouseMoved method to check for a collision with the mouse
     def mouseMoved(self):
         #get the mouse's position
@@ -29,8 +31,9 @@ class Button:
             self.clr=(255,0,255)
     #draw method for the main loop. screen is taken in so the button and text can be drawn
     def draw(self,screen):
+
         #draw the rectangle on the screen
-        pygame.draw.rect(screen,self.clr,self.rect,self.w)
+        screen.blit(self.surf,(self.x,self.y))
         #draw the text on the screen, with adjustments to center it
         screen.blit(self.button_text,(self.x+45,self.y+5))
         #always run the mouseMoved method
@@ -44,7 +47,9 @@ class Paddle:
         self.clr=clr
         self.width=width
         self.height=height
+        self.surf=pygame.surface.Surface((self.width,self.height))
+    
+    def draw(self,screen):     
         self.rect=pygame.Rect(self.x,self.y,self.width,self.height)
-    def draw(self,screen):
-        pygame.draw.rect(screen,self.clr,self.rect,self.width)
-
+        screen.blit(self.surf,(self.x,self.y))
+        checkEdges()

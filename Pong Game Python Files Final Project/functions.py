@@ -83,6 +83,7 @@ def menu(screen,clock):
                     return 'Instructions'
             if event.type==pygame.QUIT:
                 running=False
+        pygame.display.flip()
 #paddle class for game
 class Paddle:
     def __init__(self,x,y,size,clr,width,height):
@@ -92,11 +93,19 @@ class Paddle:
         self.clr=clr
         self.width=width
         self.height=height
-        self.Ychange=0
+        self.surf=pygame.surface.Surface((self.width,self.height))
+        self.surf.fill(self.clr)
+    def checkEdges(self):
+        if self.y>=580:
+            self.y=490
+            print('test')
+        if self.y<=0:
+            self.y=0
+            
+    def draw(self,screen):   
+        self.checkEdges()  
         self.rect=pygame.Rect(self.x,self.y,self.width,self.height)
-    def draw(self,screen):
-        self.y+=self.Ychange
-        pygame.draw.rect(screen,self.clr,self.rect,self.width)  
+        screen.blit(self.surf,(self.x,self.y)) 
 #create 2 paddle objects
 paddle1=Paddle(100,200,10,(255,0,0),10,100)
 paddle2=Paddle(750,200,10,(0,255,0),10,100)
@@ -116,34 +125,34 @@ def game(screen,clock):
         #draw the ball, paddles, and score text
         screen.fill((0,0,0))
         ball.draw(screen)
+        print(paddle1.y,paddle2.y)
         screen.blit(player1_score_text,(100,15))
         screen.blit(player2_score_text,(500,15))
         paddle1.draw(screen)
         paddle2.draw(screen)
         
         #get the key inputs (we couldn't get this working. We tried adding a Y change to the paddles)
+        if pygame.key.get_pressed()[pygame.K_w]:
+                    paddle1.y+=15
+        if pygame.key.get_pressed()[pygame.K_s]:
+                    paddle1.y-=15
+        if pygame.key.get_pressed()[pygame.K_o]:
+                    paddle2.y+=15
+        if pygame.key.get_pressed()[pygame.K_l]:
+                    paddle2.y-=15
         for event in pygame.event.get():
             if event.type==pygame.QUIT:
                 running=False
-            if event.type==pygame.KEYDOWN:
-                if event.key==pygame.K_w:
-                    paddle1.Ychange+=15
-                if event.key==pygame.K_s:
-                    paddle1.Ychange-=15
-            if event.type==pygame.KEYUP:
-                 if event.key==pygame.K_w:
-                    paddle1.Ychange=0
-                 if event.key==pygame.K_s:
-                    paddle1.Ychange=0
         clock.tick(60)
-        pygame.display.update()
+        pygame.display.flip()
+    
 #instructions screen
 def instructions (screen, clock) : 
     running=True
     home_button=Button(300,450,(0,255,0),'Home',150,50)
     rules_txt_1 = text(' RULES: ', 5, 10, 25, (255, 255, 255))
     rules_txt_2 = text(' 1: Each player gets 1 paddle on each side of the screen. ', 5, 10, 25, (255, 255, 255))
-    rules_txt_3 = text(' This can be controlled with either the (W & S) or (I and K) keys ', 5, 10, 25, (255, 255, 255))
+    rules_txt_3 = text(' This can be controlled with either the (W & S) or (O and L) keys ', 5, 10, 25, (255, 255, 255))
     rules_txt_4 = text(' 2: The object of the game is to keep the ball from hitting your  ', 5, 10, 25, (255, 255, 255))
     rules_txt_5 = text(' side of the screen before it hits the paddle; this will result in   ', 5, 10, 25, (255, 255, 255))
     rules_txt_6 = text(' a point for the other team   ', 5, 10, 25, (255, 255, 255))

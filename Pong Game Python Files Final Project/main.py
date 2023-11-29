@@ -36,6 +36,7 @@ running=True
 game_state='Menu'
 ######### the loop
 while running==True:
+    #window.blit(screen,(0,0))
     if game_state=='Menu':
         game_state=menu(screen,clock)
         clock.tick(60)
