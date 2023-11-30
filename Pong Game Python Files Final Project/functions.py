@@ -2,11 +2,17 @@
 import pygame
 from classes import *
 import pygame
+#import mixer so that sounds can be played
+from pygame import mixer
+pygame.init()
+#load the sounds and music of the game
+mixer.music.load('Pong Game Python Files Final Project/Assets/Sounds/main-menu-music.mp3')
+beep_sound=mixer.Sound('Pong Game Python Files Final Project/Assets/Sounds/beep.wav')
+game_over_sound=mixer.Sound('Pong Game Python Files Final Project/Assets/Sounds/game_over.wav')
+win_sound=mixer.Sound('Pong Game Python Files Final Project/Assets/Sounds//win.wav')
 
-
-
-
-
+#load the images of the game
+background=pygame.image.load('Pong Game Python Files Final Project/Assets/Images/Main-Menu.jpg')
 '''
 #Text function to make displaying text simpler. 
  Arguments are text, x location, 
@@ -22,15 +28,19 @@ def text (txt,x,y,size,clr):
     return text
 #Game state for main menu
 def menu(screen,clock):
+    #play the main menu music infinitely 
+    mixer.music.play(-1)
     running= True
     #title text, play button and instructions button
     title_text=text('Pong Game',300,300,36,(250,250,250))
     play_button=Button(100,400,(255,0,255),'Play',200,50)
     instructions_button=Button(550,400,(0,255,0),'Instructions',200,50)
     #while loop for screen drawing
+
+  
     while running==True:
         #fill the screen with a blue color, draw the buttons and text
-        screen.fill((0,0,0))
+        screen.blit(background,(0,0))
         play_button.draw(screen)
         instructions_button.draw(screen)
         screen.blit(title_text,(300,100))
@@ -40,9 +50,15 @@ def menu(screen,clock):
         for event in pygame.event.get():
             if event.type==pygame.MOUSEBUTTONDOWN:
                 if play_button.mouseMoved():
+                    #change the game state to game when play is pressed
+                    mixer.music.stop()
+                    #play a beep sound when the button is pressed
+                    mixer.Sound.play(beep_sound)
                     return 'Game'
                 if instructions_button.mouseMoved():
-                    return 'Instructions'
+                    mixer.music.stop()
+                    mixer.Sound.play(beep_sound)
+                    return 'Instructions'    
             if event.type==pygame.QUIT:
                 running=False
         pygame.display.flip()
@@ -125,4 +141,5 @@ def instructions (screen, clock) :
                 running=False
             if event.type==pygame.MOUSEBUTTONDOWN:
                 if home_button.mouseMoved():
+                    mixer.Sound.play(beep_sound)
                     return 'Menu'

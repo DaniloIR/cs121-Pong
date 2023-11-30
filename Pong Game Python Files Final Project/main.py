@@ -28,6 +28,9 @@ clock=pygame.time.Clock()
 screen = pygame.display.set_mode((800, 600))
 #Set window title
 pygame.display.set_caption('Pong Game')
+#load the game's icon and set it
+icon=pygame.image.load('Pong Game Python Files Final Project/Assets/Images/Icon.png')
+pygame.display.set_icon(icon)
 #running variable
 running=True
 #title text

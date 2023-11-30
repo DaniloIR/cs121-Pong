@@ -1,7 +1,18 @@
 #classes.py
 import pygame
 import random
+from pygame import mixer
+pygame.init()
 #ball class
+#load the sounds and music of the game
+mixer.music.load('Pong Game Python Files Final Project/Assets/Sounds/main-menu-music.mp3')
+beep_sound=mixer.Sound('Pong Game Python Files Final Project/Assets/Sounds/beep.wav')
+game_over_sound=mixer.Sound('Pong Game Python Files Final Project/Assets/Sounds/game_over.wav')
+win_sound=mixer.Sound('Pong Game Python Files Final Project/Assets/Sounds//win.wav')
+
+
+
+
 class Ball:
     def __init__(self,x,y,clr,r):
         self.x=x
