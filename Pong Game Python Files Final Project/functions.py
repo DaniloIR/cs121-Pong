@@ -3,50 +3,9 @@ import pygame
 from classes import *
 import pygame
 
-#ball class
-class Ball:
-    def __init__(self,x,y,clr,r):
-        self.x=x
-        self.y=y
-        self.clr=clr
-        self.r=r
-    def draw(self,screen):
-        pygame.draw.circle(screen,self.clr,(self.x,self.y),self.r)
-#button class for clicking and mouse moved
-class Button:
-    #init method with x,y,color,text,width,height. A rectangle uses pygame.rect, and text uses the text function
-    def __init__(self,x,y,clr,txt,w,h):
-        self.x=x
-        self.y=y
-        self.clr=clr
-        self.w=w
-        self.h=h
-        self.txt=txt
-        self.rect=pygame.Rect(self.x,self.y,self.w,self.h)
-        self.button_text=text(str(self.txt),self.x,self.y,25,(255,255,255))
-        self.surf=pygame.surface.Surface((self.w,self.h))
-    #mouseMoved method to check for a collision with the mouse
-    def mouseMoved(self):
-        #get the mouse's position
-        mouse=pygame.mouse.get_pos()
-        #iscolliding checks if the mouse is colliding with the button
-        iscolliding=self.rect.collidepoint(mouse)
-        if iscolliding==True:
-            #change the color of the button and return true (this is so that the button can be clicked)
-            self.clr=(255,255,0)
-            return True
-        #change the button's color once the mouse moves off of the button
-        else:
-            self.clr=(255,0,255)
-    #draw method for the main loop. screen is taken in so the button and text can be drawn
-    def draw(self,screen):
-        self.surf.fill(self.clr)
-        #draw the rectangle on the screen
-        screen.blit(self.surf,(self.x,self.y))
-        #draw the text on the screen, with adjustments to center it
-        screen.blit(self.button_text,(self.x+45,self.y+5))
-        #always run the mouseMoved method
-        self.mouseMoved()
+
+
+
 
 '''
 #Text function to make displaying text simpler. 
@@ -87,28 +46,8 @@ def menu(screen,clock):
             if event.type==pygame.QUIT:
                 running=False
         pygame.display.flip()
-#paddle class for game
-class Paddle:
-    def __init__(self,x,y,clr,width,height):
-        self.x=x
-        self.y=y
-        self.clr=clr
-        self.width=width
-        self.height=height
-        self.surf=pygame.surface.Surface((self.width,self.height))
-        self.surf.fill(self.clr)
-    def checkEdges(self):
-        #checkedges method to make sure that paddles don't go off screen
-        if self.y>=500:
-            self.y=500
-        if self.y<=0:
-            self.y=0
-    def draw(self,screen):   
-        #always run checkEdges
-        self.checkEdges()  
-        #blit the paddles to the screen
-        self.rect=pygame.Rect(self.x,self.y,self.width,self.height)
-        screen.blit(self.surf,(self.x,self.y)) 
+
+
 #create 2 paddle objects
 paddle1=Paddle(100,200,(255,0,0),10,100)
 paddle2=Paddle(750,200,(0,255,0),10,100)
@@ -119,6 +58,7 @@ player2_score=0
 ball=Ball(400,200,(255,255,255),20)
 #game function for main game
 def game(screen,clock):
+    paddle_collision(paddle1,ball)
     #player 1 and 2 scores as text to display
     player1_score_text=text('Player 1 Score:'+str(player1_score),0,15,32,(255,255,255))
     player2_score_text=text('Player 2 Score:'+str(player2_score),450,15,32,(255,255,255))
@@ -130,24 +70,27 @@ def game(screen,clock):
         ball.draw(screen)
         screen.blit(player1_score_text,(100,15))
         screen.blit(player2_score_text,(500,15))
-        paddle1.draw(screen)
-        paddle2.draw(screen)
-        
+        paddle1.draw(screen,ball)
+        paddle2.draw(screen,ball)
         #get the key inputs and move the paddles accordingly
         if pygame.key.get_pressed()[pygame.K_w]:
-                    paddle1.y+=15
-        if pygame.key.get_pressed()[pygame.K_s]:
                     paddle1.y-=15
+        if pygame.key.get_pressed()[pygame.K_s]:
+                    paddle1.y+=15
         if pygame.key.get_pressed()[pygame.K_o]:
-                    paddle2.y+=15
-        if pygame.key.get_pressed()[pygame.K_l]:
                     paddle2.y-=15
+        if pygame.key.get_pressed()[pygame.K_l]:
+                    paddle2.y+=15
         for event in pygame.event.get():
             if event.type==pygame.QUIT:
                 running=False
         clock.tick(60)
         pygame.display.flip()
-    
+def paddle_collision(paddle,ball):
+    paddle_surf=paddle.surf
+    #paddlerect=paddle_surf.get_pos()
+
+
 #instructions screen
 def instructions (screen, clock) : 
     running=True
