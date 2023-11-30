@@ -24,6 +24,7 @@ class Button:
         self.txt=txt
         self.rect=pygame.Rect(self.x,self.y,self.w,self.h)
         self.button_text=text(str(self.txt),self.x,self.y,25,(255,255,255))
+        self.surf=pygame.surface.Surface((self.w,self.h))
     #mouseMoved method to check for a collision with the mouse
     def mouseMoved(self):
         #get the mouse's position
@@ -39,12 +40,14 @@ class Button:
             self.clr=(255,0,255)
     #draw method for the main loop. screen is taken in so the button and text can be drawn
     def draw(self,screen):
+        self.surf.fill(self.clr)
         #draw the rectangle on the screen
-        pygame.draw.rect(screen,self.clr,self.rect,self.w)
+        screen.blit(self.surf,(self.x,self.y))
         #draw the text on the screen, with adjustments to center it
         screen.blit(self.button_text,(self.x+45,self.y+5))
         #always run the mouseMoved method
         self.mouseMoved()
+
 '''
 #Text function to make displaying text simpler. 
  Arguments are text, x location, 
@@ -86,29 +89,29 @@ def menu(screen,clock):
         pygame.display.flip()
 #paddle class for game
 class Paddle:
-    def __init__(self,x,y,size,clr,width,height):
+    def __init__(self,x,y,clr,width,height):
         self.x=x
         self.y=y
-        self.size=size
         self.clr=clr
         self.width=width
         self.height=height
         self.surf=pygame.surface.Surface((self.width,self.height))
         self.surf.fill(self.clr)
     def checkEdges(self):
-        if self.y>=580:
-            self.y=490
-            print('test')
+        #checkedges method to make sure that paddles don't go off screen
+        if self.y>=500:
+            self.y=500
         if self.y<=0:
             self.y=0
-            
     def draw(self,screen):   
+        #always run checkEdges
         self.checkEdges()  
+        #blit the paddles to the screen
         self.rect=pygame.Rect(self.x,self.y,self.width,self.height)
         screen.blit(self.surf,(self.x,self.y)) 
 #create 2 paddle objects
-paddle1=Paddle(100,200,10,(255,0,0),10,100)
-paddle2=Paddle(750,200,10,(0,255,0),10,100)
+paddle1=Paddle(100,200,(255,0,0),10,100)
+paddle2=Paddle(750,200,(0,255,0),10,100)
 #player 1 and 2 scores
 player1_score=0
 player2_score=0
@@ -125,13 +128,12 @@ def game(screen,clock):
         #draw the ball, paddles, and score text
         screen.fill((0,0,0))
         ball.draw(screen)
-        print(paddle1.y,paddle2.y)
         screen.blit(player1_score_text,(100,15))
         screen.blit(player2_score_text,(500,15))
         paddle1.draw(screen)
         paddle2.draw(screen)
         
-        #get the key inputs (we couldn't get this working. We tried adding a Y change to the paddles)
+        #get the key inputs and move the paddles accordingly
         if pygame.key.get_pressed()[pygame.K_w]:
                     paddle1.y+=15
         if pygame.key.get_pressed()[pygame.K_s]:
