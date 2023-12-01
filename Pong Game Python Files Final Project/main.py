@@ -17,7 +17,6 @@ Using version 2.5.2
 '''
 ## Imports
 import pygame
-from classes import *
 from functions import *
 #initilize pygame
 pygame.init()
