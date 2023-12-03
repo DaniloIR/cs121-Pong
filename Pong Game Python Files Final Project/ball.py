@@ -1,6 +1,7 @@
 import pygame
 #ball class
 class Ball:
+    #init method, x, y, color, radius values are passed in
     def __init__(self,x,y,clr,r):
         self.x=x
         self.y=y
@@ -8,7 +9,10 @@ class Ball:
         self.r=r
         self.vel_x=5
         self.vel_y=5
+        #surface, player 1 and 2 scores are 0 by default
         self.surf=pygame.surface.Surface((self.r,self.r))
+        self.player1_score=0
+        self.player2_score=0
     def update(self):
         self.x+=self.vel_x
         self.y+=self.vel_y
@@ -16,31 +20,21 @@ class Ball:
     def checkEdges(self):
         if self.x>800:
             #give point to first player
-            #print('first player scores')
             self.x=400
             self.y=300
-            return 'player 1 scores'
+            self.player1_score+=1
         if self.x<0:
             #give point to second player
-           # print('player 2 scores')
             self.x=400
             self.y=300
-            return 'player 2 scores'
+            self.player2_score+=1
         if self.y>580:
             self.vel_y*=-1
         if self.y<0:
             self.vel_y*=-1
     def draw(self,screen):
+        #fill the ball with the color, draw it, and run the other methods
         self.surf.fill(self.clr)
         self.update()
         self.checkEdges()
         screen.blit(self.surf,(self.x,self.y))
-        #pygame.draw.circle(screen,self.clr,(self.x,self.y),self.r)
-def text (txt,x,y,size,clr):
-    #bring in screen variable
-    screen = pygame.display.set_mode((800, 600))
-    #font Variable, freesansbold font, size
-    font=pygame.font.Font('freesansbold.ttf',size)
-    #text variable, string, anti-aliasing true, color
-    text=font.render(str(txt),True,clr)
-    return text

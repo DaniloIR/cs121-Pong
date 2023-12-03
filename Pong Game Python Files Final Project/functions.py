@@ -65,34 +65,29 @@ def menu(screen,clock):
                 running=False
         pygame.display.flip()
 
-score_increment=1
 #create 2 paddle objects
 paddle1=Paddle(100,200,(255,0,0),10,100)
 paddle2=Paddle(750,200,(0,255,0),10,100)
-#player 1 and 2 scores
-player1_score=0
-player2_score=0
 #create a ball object
 ball=Ball(400,200,(255,255,255),20)
 #game function for main game
 #function for ball to check edges
-player1_score_text=text('Player 1 Score:'+str(player1_score),0,15,32,(255,255,255))
-player2_score_text=text('Player 2 Score:'+str(player2_score),450,15,32,(255,255,255))
-def game(screen,clock):
 
+
+def game(screen,clock):
+    #create a font variable, so that the score can be updated every frame. Size of 32
+    font=pygame.font.Font('freesansbold.ttf',32)
     paddle_collision(paddle1,ball)
     #player 1 and 2 scores as text to display
- 
     running=True
     #the loop
     while running==True:
+        #render the scores 
+        player1_score_text=font.render('Player 1 Score:'+str(ball.player1_score),True,(255,255,255))
+        player2_score_text=font.render('Player 2 Score:'+str(ball.player2_score),True,(255,255,255))
         #draw the ball, paddles, and score text
         screen.fill((0,0,0))
         ball.draw(screen)
-        if ball.checkEdges()=='player 1 scores':
-            print('test 1')
-        if ball.checkEdges()=='player 2 scores':
-            print('test 2')
         screen.blit(player1_score_text,(100,15))
         screen.blit(player2_score_text,(500,15))
         paddle1.draw(screen,ball)
