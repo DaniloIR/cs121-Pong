@@ -48,6 +48,8 @@ while running==True:
     if game_state=='Instructions':
         game_state=instructions(screen,clock)
         clock.tick(60)
+    if game_state=='Game Over':
+        game_state=game_over(screen,clock)
     for event in pygame.event.get():
         if event.type==pygame.QUIT:
             running=False

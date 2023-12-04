@@ -28,6 +28,8 @@ def text (txt,x,y,size,clr):
     #text variable, string, anti-aliasing true, color
     text=font.render(str(txt),True,clr)
     return text
+#make a button to play the game
+play_button=Button(100,400,(255,0,255),'Play',200,50)
 #Game state for main menu
 def menu(screen,clock):
     #play the main menu music infinitely 
@@ -35,7 +37,6 @@ def menu(screen,clock):
     running= True
     #title text, play button and instructions button
     title_text=text('Pong Game',300,300,36,(250,250,250))
-    play_button=Button(100,400,(255,0,255),'Play',200,50)
     instructions_button=Button(550,400,(0,255,0),'Instructions',200,50)
     #while loop for screen drawing
 
@@ -52,6 +53,8 @@ def menu(screen,clock):
         for event in pygame.event.get():
             if event.type==pygame.MOUSEBUTTONDOWN:
                 if play_button.mouseMoved():
+                    #run the resetgame function
+                    resetGame()
                     #change the game state to game when play is pressed
                     mixer.music.stop()
                     #play a beep sound when the button is pressed
@@ -72,7 +75,12 @@ paddle2=Paddle(750,200,(0,255,0),10,100)
 ball=Ball(400,200,(255,255,255),20)
 #game function for main game
 #function for ball to check edges
-
+#resetgame function to reset the positions of the paddle, and player scores
+def resetGame():
+    ball.player1_score=0
+    ball.player2_score=0
+    paddle1.y=200
+    paddle2.y=200
 
 def game(screen,clock):
     #create a font variable, so that the score can be updated every frame. Size of 32
@@ -101,20 +109,30 @@ def game(screen,clock):
                     paddle2.y-=15
         if pygame.key.get_pressed()[pygame.K_l]:
                     paddle2.y+=15
+        #if the escape key is pressed, go to the menu
+        if pygame.key.get_pressed()[pygame.K_ESCAPE]:
+                    return 'Menu'
         for event in pygame.event.get():
             if event.type==pygame.QUIT:
                 running=False
         clock.tick(60)
         pygame.display.flip()
+        #if the score of either player is 10, go to the game over screen and play a sound
+        if ball.player1_score==10 or ball.player2_score==10:
+            mixer.Sound.play(game_over_sound)
+            return 'Game Over'
 def paddle_collision(paddle,ball):
     paddle_surf=paddle.surf
     #paddlerect=paddle_surf.get_pos()
 
 
+#make a home button
+home_button=Button(300,450,(0,255,0),'Home',150,50)
 #instructions screen
+
+
 def instructions (screen, clock) : 
     running=True
-    home_button=Button(300,450,(0,255,0),'Home',150,50)
     rules_txt_1 = text(' RULES: ', 5, 10, 25, (255, 255, 255))
     rules_txt_2 = text(' 1: Each player gets 1 paddle on each side of the screen. ', 5, 10, 25, (255, 255, 255))
     rules_txt_3 = text(' This can be controlled with either the (W & S) or (O and L) keys ', 5, 10, 25, (255, 255, 255))
@@ -125,6 +143,7 @@ def instructions (screen, clock) :
     rules_txt_8 = text(' 4: There will be power-ups and other fun challenges hidden   ', 5, 10, 25, (255, 255, 255))
     rules_txt_9 = text(' within the game so.. watch out!  ', 5, 10, 25, (255, 255, 255))
     rules_txt_10 = text(' Good Luck and Have Fun!!  ', 5, 10, 25, (255, 255, 255))
+    rules_txt_11=text('Press escape in the game to go to the main menu',5,10,25,(255,255,255))
     while running ==True:
         screen.fill((0,0,0))
         home_button.draw(screen)
@@ -138,6 +157,7 @@ def instructions (screen, clock) :
         screen.blit(rules_txt_8, (5, 230) )
         screen.blit(rules_txt_9, (5, 260) )
         screen.blit(rules_txt_10, (250, 310) )
+        screen.blit(rules_txt_11,(5,360))
         pygame.display.update()
         clock.tick(60)
         for event in pygame.event.get():
@@ -147,3 +167,40 @@ def instructions (screen, clock) :
                 if home_button.mouseMoved():
                     mixer.Sound.play(beep_sound)
                     return 'Menu'
+
+
+#game over screen
+def game_over(screen,clock):
+    running=True
+    #make a variable called winner.
+    winner=0
+    #determine who won by checking the values of the scores
+    if ball.player1_score>ball.player2_score:
+        winner=1
+    else:
+        winner=2
+    #make text to display who the winner is
+    winner_text=text(f'Player {winner} won the game!',200,200,32,(255,255,255))
+    game_over_text=text('GAME OVER',200,50,64,(255,255,255))
+    while running==True:
+        #fill the screen with a red color
+        screen.fill((255,0,0))
+        #draw the text and buttons on the screen
+        home_button.draw(screen)
+        screen.blit(game_over_text,(200,50))
+        screen.blit(winner_text,(200,200))
+        play_button.draw(screen)
+        pygame.display.update()
+        clock.tick(60)
+        #get button clicks
+        for event in pygame.event.get():
+            if event.type==pygame.MOUSEBUTTONDOWN:
+                if home_button.mouseMoved():
+                    mixer.Sound.play(beep_sound)
+                    return 'Menu'
+                if play_button.mouseMoved():
+                    mixer.Sound.play(beep_sound)
+                    resetGame()
+                    return 'Game'
+            if event.type==pygame.QUIT:
+                running=False
