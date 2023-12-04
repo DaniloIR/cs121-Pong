@@ -8,13 +8,12 @@ from ball import *
 from pygame import mixer
 pygame.init()
 #load the sounds and music of the game
-mixer.music.load('Pong Game Python Files Final Project/Assets/Sounds/main-menu-music.mp3')
-beep_sound=mixer.Sound('Pong Game Python Files Final Project/Assets/Sounds/beep.wav')
-game_over_sound=mixer.Sound('Pong Game Python Files Final Project/Assets/Sounds/game_over.wav')
-win_sound=mixer.Sound('Pong Game Python Files Final Project/Assets/Sounds//win.wav')
+mixer.music.load('Assets/Sounds/main-menu-music.mp3')
+beep_sound=mixer.Sound('Assets/Sounds/beep.wav')
+game_over_sound=mixer.Sound('Assets/Sounds/game_over.wav')
 
 #load the images of the game
-background=pygame.image.load('Pong Game Python Files Final Project/Assets/Images/Main-Menu.jpg')
+background=pygame.image.load('Assets/Images/Main-Menu.jpg')
 '''
 #Text function to make displaying text simpler. 
  Arguments are text, x location, 
@@ -69,8 +68,8 @@ def menu(screen,clock):
         pygame.display.flip()
 
 #create 2 paddle objects
-paddle1=Paddle(100,200,(255,0,0),10,100)
-paddle2=Paddle(750,200,(0,255,0),10,100)
+paddle1=Paddle(100,200,(255,0,0),10,100,1)
+paddle2=Paddle(750,200,(0,255,0),10,100,2)
 #create a ball object
 ball=Ball(400,200,(255,255,255),20)
 #game function for main game
@@ -85,7 +84,6 @@ def resetGame():
 def game(screen,clock):
     #create a font variable, so that the score can be updated every frame. Size of 32
     font=pygame.font.Font('freesansbold.ttf',32)
-    paddle_collision(paddle1,ball)
     #player 1 and 2 scores as text to display
     running=True
     #the loop
@@ -95,6 +93,7 @@ def game(screen,clock):
         player2_score_text=font.render('Player 2 Score:'+str(ball.player2_score),True,(255,255,255))
         #draw the ball, paddles, and score text
         screen.fill((0,0,0))
+        paddle_collision()
         ball.draw(screen)
         screen.blit(player1_score_text,(100,15))
         screen.blit(player2_score_text,(500,15))
@@ -119,11 +118,16 @@ def game(screen,clock):
         pygame.display.flip()
         #if the score of either player is 10, go to the game over screen and play a sound
         if ball.player1_score==10 or ball.player2_score==10:
-            mixer.Sound.play(game_over_sound)
             return 'Game Over'
-def paddle_collision(paddle,ball):
-    paddle_surf=paddle.surf
-    #paddlerect=paddle_surf.get_pos()
+def paddle_collision():
+    if paddle1.checkColiding(ball)=='collision paddle 1':
+        ball.vel_x*=-1
+        ball.vel_y*=-1
+        mixer.Sound.play(beep_sound)
+    if paddle2.checkColiding(ball)=='collision paddle 2':
+        ball.vel_x*=-1
+        ball.vel_y*=-1
+        mixer.Sound.play(beep_sound)
 
 
 #make a home button
@@ -171,6 +175,7 @@ def instructions (screen, clock) :
 
 #game over screen
 def game_over(screen,clock):
+    mixer.Sound.play(game_over_sound)
     running=True
     #make a variable called winner.
     winner=0

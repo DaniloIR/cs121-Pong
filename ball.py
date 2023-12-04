@@ -1,5 +1,9 @@
 import pygame
+from pygame import mixer
+pygame.init()
 #ball class
+beep_sound=mixer.Sound('Assets/Sounds/beep.wav')
+win_sound=mixer.Sound('Assets/Sounds//win.wav')
 class Ball:
     #init method, x, y, color, radius values are passed in
     def __init__(self,x,y,clr,r):
@@ -23,15 +27,19 @@ class Ball:
             self.x=400
             self.y=300
             self.player1_score+=1
+            mixer.Sound.play(win_sound)
         if self.x<0:
             #give point to second player
             self.x=400
             self.y=300
             self.player2_score+=1
+            mixer.Sound.play(win_sound)
         if self.y>580:
             self.vel_y*=-1
-        if self.y<0:
+            mixer.Sound.play(beep_sound)
+        if self.y<20:
             self.vel_y*=-1
+            mixer.Sound.play(beep_sound)
     def draw(self,screen):
         #fill the ball with the color, draw it, and run the other methods
         self.surf.fill(self.clr)
