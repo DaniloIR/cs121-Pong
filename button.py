@@ -31,7 +31,7 @@ class Button:
         #draw the rectangle on the screen
         screen.blit(self.surf,(self.x,self.y))
         #draw the text on the screen, with adjustments to center it
-        screen.blit(self.button_text,(self.x+45,self.y+5))
+        screen.blit(self.button_text,(self.x+35,self.y+5))
         #always run the mouseMoved method
         self.mouseMoved()
 #text function

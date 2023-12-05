@@ -4,16 +4,30 @@ import pygame
 from paddle import *
 from button import *
 from ball import *
+#backgrounds to randomly chose a background
+import random
+bg1=pygame.image.load('Assets/Images/bg1.png')
+bg2=pygame.image.load('Assets/Images/bg2.jpg')
+bg3=pygame.image.load('Assets/Images/bg3.jpg')
+bg4=pygame.image.load('Assets/Images/bg4.jpg')
+bg5=pygame.image.load('Assets/Images/bg5.jpg')
+bg6=pygame.image.load('Assets/Images/bg6.jpg')
+bg7=pygame.image.load('Assets/Images/bg7.jpg')
+background=[bg1,bg2,bg3,bg4,bg5,bg6,bg7]
+bg_num=random.randint(0,6)
+random_backround=background[bg_num]
+
 #import mixer so that sounds can be played
 from pygame import mixer
 pygame.init()
 #load the sounds and music of the game
-mixer.music.load('Assets/Sounds/main-menu-music.mp3')
 beep_sound=mixer.Sound('Assets/Sounds/beep.wav')
 game_over_sound=mixer.Sound('Assets/Sounds/game_over.wav')
-
+powerup_sound=mixer.Sound('Assets/Sounds/powerup.wav')
 #load the images of the game
 background=pygame.image.load('Assets/Images/Main-Menu.jpg')
+mixer.music.load('Assets/Sounds/game_song.wav')
+end_music=mixer.Sound('Assets/Sounds/Halo.wav')
 '''
 #Text function to make displaying text simpler. 
  Arguments are text, x location, 
@@ -36,7 +50,7 @@ def menu(screen,clock):
     running= True
     #title text, play button and instructions button
     title_text=text('Pong Game',300,300,36,(250,250,250))
-    instructions_button=Button(550,400,(0,255,0),'Instructions',200,50)
+    instructions_button=Button(475,400,(0,255,0),'Instructions',200,50)
     #while loop for screen drawing
 
   
@@ -44,6 +58,7 @@ def menu(screen,clock):
         #fill the screen with a blue color, draw the buttons and text
         screen.blit(background,(0,0))
         play_button.draw(screen)
+    
         instructions_button.draw(screen)
         screen.blit(title_text,(300,100))
         clock.tick(60)
@@ -68,7 +83,7 @@ def menu(screen,clock):
         pygame.display.flip()
 
 #create 2 paddle objects
-paddle1=Paddle(100,200,(255,0,0),10,100,1)
+paddle1=Paddle(75,200,(255,0,0),10,100,1)
 paddle2=Paddle(750,200,(0,255,0),10,100,2)
 #create a ball object
 ball=Ball(400,200,(255,255,255),20)
@@ -80,19 +95,23 @@ def resetGame():
     ball.player2_score=0
     paddle1.y=200
     paddle2.y=200
-
+    paddle1.height=100
+    paddle2.height=100
 def game(screen,clock):
+    background=[bg1,bg2,bg3,bg4,bg5,bg6,bg7]
+    bg_num=random.randint(0,6)
+    random_backround=background[bg_num]
     #create a font variable, so that the score can be updated every frame. Size of 32
     font=pygame.font.Font('freesansbold.ttf',32)
     #player 1 and 2 scores as text to display
     running=True
     #the loop
     while running==True:
+        screen.blit(random_backround,(0,0))
         #render the scores 
         player1_score_text=font.render('Player 1 Score:'+str(ball.player1_score),True,(255,255,255))
         player2_score_text=font.render('Player 2 Score:'+str(ball.player2_score),True,(255,255,255))
         #draw the ball, paddles, and score text
-        screen.fill((0,0,0))
         paddle_collision()
         ball.draw(screen)
         screen.blit(player1_score_text,(100,15))
@@ -116,18 +135,35 @@ def game(screen,clock):
                 running=False
         clock.tick(60)
         pygame.display.flip()
+        adjust_paddle(ball.player1_score,ball.player2_score)
         #if the score of either player is 10, go to the game over screen and play a sound
         if ball.player1_score==10 or ball.player2_score==10:
             return 'Game Over'
+#paddle collision function to use with ball
 def paddle_collision():
     if paddle1.checkColiding(ball)=='collision paddle 1':
-        ball.vel_x*=-1
-        ball.vel_y*=-1
-        mixer.Sound.play(beep_sound)
+       ball.vel_x=10
+       ball.vel_y=10
     if paddle2.checkColiding(ball)=='collision paddle 2':
-        ball.vel_x*=-1
-        ball.vel_y*=-1
+        ball.vel_x=-10
+        ball.vel_y=-10
         mixer.Sound.play(beep_sound)
+
+#adjust different parts of the paddle when a score is reached 
+def adjust_paddle(p1_score,p2_score):
+
+    if p1_score ==5:
+        paddle1.height=250
+        mixer.Sound.play(powerup_sound,1)
+    if p2_score ==5:
+        paddle2.height=250
+        mixer.Sound.play(powerup_sound,1)
+    if p1_score ==8:
+        paddle1.height=25
+        mixer.Sound.play(powerup_sound,1)
+    if p2_score ==8:
+        paddle2.height=25
+        mixer.Sound.play(powerup_sound,1)
 
 
 #make a home button
@@ -136,6 +172,8 @@ home_button=Button(300,450,(0,255,0),'Home',150,50)
 
 
 def instructions (screen, clock) : 
+    #move the home button back to it's original location
+    home_button=Button(300,450,(0,255,0),'Home',150,50)
     running=True
     rules_txt_1 = text(' RULES: ', 5, 10, 25, (255, 255, 255))
     rules_txt_2 = text(' 1: Each player gets 1 paddle on each side of the screen. ', 5, 10, 25, (255, 255, 255))
@@ -175,7 +213,9 @@ def instructions (screen, clock) :
 
 #game over screen
 def game_over(screen,clock):
-    mixer.Sound.play(game_over_sound)
+    #move the home button location
+    home_button=Button(475,400,(0,255,0),'Home',150,50)
+    mixer.Sound.play(game_over_sound,-1)
     running=True
     #make a variable called winner.
     winner=0
@@ -188,6 +228,7 @@ def game_over(screen,clock):
     winner_text=text(f'Player {winner} won the game!',200,200,32,(255,255,255))
     game_over_text=text('GAME OVER',200,50,64,(255,255,255))
     while running==True:
+        
         #fill the screen with a red color
         screen.fill((255,0,0))
         #draw the text and buttons on the screen

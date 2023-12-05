@@ -11,8 +11,8 @@ class Ball:
         self.y=y
         self.clr=clr
         self.r=r
-        self.vel_x=5
-        self.vel_y=5
+        self.vel_x=7
+        self.vel_y=7
         #surface, player 1 and 2 scores are 0 by default
         self.surf=pygame.surface.Surface((self.r,self.r))
         self.player1_score=0

@@ -40,5 +40,7 @@ class Paddle:
         self.checkEdges()  
         self.checkColiding(ball)
         #blit the paddles to the screen
+        self.surf=pygame.surface.Surface((self.width,self.height))
         self.rect=pygame.Rect(self.x,self.y,self.width,self.height)
+        self.surf.fill(self.clr)
         screen.blit(self.surf,(self.x,self.y)) 
