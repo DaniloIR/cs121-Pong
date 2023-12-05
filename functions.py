@@ -4,18 +4,29 @@ import pygame
 from paddle import *
 from button import *
 from ball import *
-#backgrounds to randomly chose a background
 import random
+
+
+############# global variables
+play_button=Button(100,400,(255,0,255),'Play',200,50)
+paddle1=Paddle(75,200,(255,0,0),10,100,1)
+paddle2=Paddle(750,200,(0,255,0),10,100,2)
+ball=Ball(400,200,(255,255,255),20)
+home_button=Button(300,450,(0,255,0),'Home',150,50)
+
+######## background images
 bg1=pygame.image.load('Assets/Images/bg1.png')
 bg2=pygame.image.load('Assets/Images/bg2.jpg')
 bg3=pygame.image.load('Assets/Images/bg3.jpg')
 bg4=pygame.image.load('Assets/Images/bg4.jpg')
-bg5=pygame.image.load('Assets/Images/bg5.jpg')
-bg6=pygame.image.load('Assets/Images/bg6.jpg')
+bg5=pygame.image.load('Assets/Images/bg5_lower_brightness.jpg')
+bg6=pygame.image.load('Assets/Images/bg6_lower_brightness.jpg')
 bg7=pygame.image.load('Assets/Images/bg7.jpg')
-background=[bg1,bg2,bg3,bg4,bg5,bg6,bg7]
-bg_num=random.randint(0,6)
-random_backround=background[bg_num]
+#function to reset background, returns a random background
+def reset_background():
+    background=[bg1,bg2,bg3,bg4,bg5,bg6,bg7]
+    bg_num=random.randint(0,6)
+    return background[bg_num]
 
 #import mixer so that sounds can be played
 from pygame import mixer
@@ -26,8 +37,8 @@ game_over_sound=mixer.Sound('Assets/Sounds/game_over.wav')
 powerup_sound=mixer.Sound('Assets/Sounds/powerup.wav')
 #load the images of the game
 background=pygame.image.load('Assets/Images/Main-Menu.jpg')
-mixer.music.load('Assets/Sounds/game_song.wav')
-end_music=mixer.Sound('Assets/Sounds/Halo.wav')
+
+
 '''
 #Text function to make displaying text simpler. 
  Arguments are text, x location, 
@@ -41,10 +52,13 @@ def text (txt,x,y,size,clr):
     #text variable, string, anti-aliasing true, color
     text=font.render(str(txt),True,clr)
     return text
-#make a button to play the game
-play_button=Button(100,400,(255,0,255),'Play',200,50)
+
+
+
 #Game state for main menu
 def menu(screen,clock):
+    #load the main menu song
+    mixer.music.load('Assets/Sounds/game_song.wav')
     #play the main menu music infinitely 
     mixer.music.play(-1)
     running= True
@@ -73,23 +87,22 @@ def menu(screen,clock):
                     mixer.music.stop()
                     #play a beep sound when the button is pressed
                     mixer.Sound.play(beep_sound)
+                    #unload the music so that the ending music will work
+                    mixer.music.unload()
                     return 'Game'
                 if instructions_button.mouseMoved():
                     mixer.music.stop()
                     mixer.Sound.play(beep_sound)
+                    mixer.music.unload()
                     return 'Instructions'    
             if event.type==pygame.QUIT:
                 running=False
         pygame.display.flip()
 
-#create 2 paddle objects
-paddle1=Paddle(75,200,(255,0,0),10,100,1)
-paddle2=Paddle(750,200,(0,255,0),10,100,2)
-#create a ball object
-ball=Ball(400,200,(255,255,255),20)
-#game function for main game
-#function for ball to check edges
-#resetgame function to reset the positions of the paddle, and player scores
+
+
+
+#resetgame function to reset the positions of the paddle, ball, and player scores
 def resetGame():
     ball.player1_score=0
     ball.player2_score=0
@@ -97,17 +110,19 @@ def resetGame():
     paddle2.y=200
     paddle1.height=100
     paddle2.height=100
+    ball.x=400
+    ball.y=200
 def game(screen,clock):
-    background=[bg1,bg2,bg3,bg4,bg5,bg6,bg7]
-    bg_num=random.randint(0,6)
-    random_backround=background[bg_num]
+    #get a new random background
+    random_background=reset_background()
     #create a font variable, so that the score can be updated every frame. Size of 32
     font=pygame.font.Font('freesansbold.ttf',32)
     #player 1 and 2 scores as text to display
     running=True
     #the loop
     while running==True:
-        screen.blit(random_backround,(0,0))
+        #blit the background to the screen
+        screen.blit(random_background,(0,0))
         #render the scores 
         player1_score_text=font.render('Player 1 Score:'+str(ball.player1_score),True,(255,255,255))
         player2_score_text=font.render('Player 2 Score:'+str(ball.player2_score),True,(255,255,255))
@@ -166,8 +181,7 @@ def adjust_paddle(p1_score,p2_score):
         mixer.Sound.play(powerup_sound,1)
 
 
-#make a home button
-home_button=Button(300,450,(0,255,0),'Home',150,50)
+
 #instructions screen
 
 
@@ -181,7 +195,7 @@ def instructions (screen, clock) :
     rules_txt_4 = text(' 2: The object of the game is to keep the ball from hitting your  ', 5, 10, 25, (255, 255, 255))
     rules_txt_5 = text(' side of the screen before it hits the paddle; this will result in   ', 5, 10, 25, (255, 255, 255))
     rules_txt_6 = text(' a point for the other team   ', 5, 10, 25, (255, 255, 255))
-    rules_txt_7 = text(' 3: The first player to get to a score of 21 wins!   ', 5, 10, 25, (255, 255, 255))
+    rules_txt_7 = text(' 3: The first player to get to a score of 10 wins!   ', 5, 10, 25, (255, 255, 255))
     rules_txt_8 = text(' 4: There will be power-ups and other fun challenges hidden   ', 5, 10, 25, (255, 255, 255))
     rules_txt_9 = text(' within the game so.. watch out!  ', 5, 10, 25, (255, 255, 255))
     rules_txt_10 = text(' Good Luck and Have Fun!!  ', 5, 10, 25, (255, 255, 255))
@@ -213,9 +227,11 @@ def instructions (screen, clock) :
 
 #game over screen
 def game_over(screen,clock):
+    #load the game ending music
+    mixer.music.load('Assets/Sounds/Halo.wav')
+    mixer.music.play(-1)
     #move the home button location
     home_button=Button(475,400,(0,255,0),'Home',150,50)
-    mixer.Sound.play(game_over_sound,-1)
     running=True
     #make a variable called winner.
     winner=0
@@ -243,10 +259,13 @@ def game_over(screen,clock):
             if event.type==pygame.MOUSEBUTTONDOWN:
                 if home_button.mouseMoved():
                     mixer.Sound.play(beep_sound)
+                    #unload the music so that the main menu music can play again
+                    mixer.music.unload()
                     return 'Menu'
                 if play_button.mouseMoved():
                     mixer.Sound.play(beep_sound)
                     resetGame()
+                    mixer.music.unload()
                     return 'Game'
             if event.type==pygame.QUIT:
                 running=False
