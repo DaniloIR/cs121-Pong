@@ -103,6 +103,7 @@ def menu(screen,clock):
 
 
 #resetgame function to reset the positions of the paddle, ball, and player scores
+
 def resetGame():
     ball.player1_score=0
     ball.player2_score=0
@@ -154,7 +155,11 @@ def game(screen,clock):
         #if the score of either player is 10, go to the game over screen and play a sound
         if ball.player1_score==10 or ball.player2_score==10:
             return 'Game Over'
-#paddle collision function to use with ball
+        #paddle collision function to use with ball
+        not_reached_5_paddle_1 = True
+        not_reached_8_paddle_1 = True
+        not_reached_5_paddle_2 = True
+        not_reached_8_paddle_2 = True
 def paddle_collision():
     if paddle1.checkColiding(ball)=='collision paddle 1':
        ball.vel_x=10
@@ -165,20 +170,24 @@ def paddle_collision():
         mixer.Sound.play(beep_sound)
 
 #adjust different parts of the paddle when a score is reached 
-def adjust_paddle(p1_score,p2_score):
 
-    if p1_score ==5:
+def adjust_paddle(p1_score,p2_score):
+    if p1_score ==5 and ball.not_reached_5_paddle_1:
         paddle1.height=250
         mixer.Sound.play(powerup_sound,1)
-    if p2_score ==5:
+        ball.not_reached_5_paddle_1 = False
+    if p2_score ==5 and ball.not_reached_5_paddle_2:
         paddle2.height=250
         mixer.Sound.play(powerup_sound,1)
-    if p1_score ==8:
+        ball.not_reached_5_paddle_2 = False
+    if p1_score ==8 and ball.not_reached_8_paddle_1:
         paddle1.height=25
         mixer.Sound.play(powerup_sound,1)
-    if p2_score ==8:
+        ball.not_reached_8_paddle_1 = False
+    if p2_score ==8 and ball.not_reached_8_paddle_2:
         paddle2.height=25
         mixer.Sound.play(powerup_sound,1)
+        ball.not_reached_8_paddle_2 = False
 
 
 

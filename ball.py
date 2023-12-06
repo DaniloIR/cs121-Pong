@@ -17,6 +17,11 @@ class Ball:
         self.surf=pygame.surface.Surface((self.r,self.r))
         self.player1_score=0
         self.player2_score=0
+        #paddle sound
+        self.not_reached_5_paddle_1 = True
+        self.not_reached_8_paddle_1 = True
+        self.not_reached_5_paddle_2 = True
+        self.not_reached_8_paddle_2 = True
     def update(self):
         self.x+=self.vel_x
         self.y+=self.vel_y
