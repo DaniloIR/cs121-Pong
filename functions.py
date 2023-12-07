@@ -28,6 +28,11 @@ def reset_background():
     bg_num=random.randint(0,6)
     return background[bg_num]
 
+
+
+
+
+
 #import mixer so that sounds can be played
 from pygame import mixer
 pygame.init()
@@ -55,12 +60,21 @@ def text (txt,x,y,size,clr):
 
 
 
-#Game state for main menu
+
+
+
+
+
+
+
+
+###################Game state for main menu
 def menu(screen,clock):
     #load the main menu song
     mixer.music.load('Assets/Sounds/game_song.wav')
     #play the main menu music infinitely 
     mixer.music.play(-1)
+    #set running to true
     running= True
     #title text, play button and instructions button
     title_text=text('Pong Game',300,300,36,(250,250,250))
@@ -69,12 +83,13 @@ def menu(screen,clock):
 
   
     while running==True:
-        #fill the screen with a blue color, draw the buttons and text
+        #fill the screen with the background, and draw buttons/text
         screen.blit(background,(0,0))
         play_button.draw(screen)
     
         instructions_button.draw(screen)
         screen.blit(title_text,(300,100))
+        #update the display
         clock.tick(60)
         pygame.display.update()
         #button click events
@@ -89,10 +104,14 @@ def menu(screen,clock):
                     mixer.Sound.play(beep_sound)
                     #unload the music so that the ending music will work
                     mixer.music.unload()
+                    #change state to instructions
                     return 'Game'
                 if instructions_button.mouseMoved():
+                    #stop the music
                     mixer.music.stop()
+                    #play a sound
                     mixer.Sound.play(beep_sound)
+                    #unload the music
                     mixer.music.unload()
                     return 'Instructions'    
             if event.type==pygame.QUIT:
@@ -102,23 +121,51 @@ def menu(screen,clock):
 
 
 
-#resetgame function to reset the positions of the paddle, ball, and player scores
+
+
+
+
+
+
+
+
+#############resetgame function to reset the positions of the paddle, ball, and player scores
 
 def resetGame():
+    #set player 1 and 2 score to 0
     ball.player1_score=0
     ball.player2_score=0
+    #reset the locations and heights of the paddles
     paddle1.y=200
     paddle2.y=200
     paddle1.height=100
     paddle2.height=100
+    #reset the ball location
     ball.x=400
     ball.y=200
+    #set the score intervals back so that powerups work again
+    ball.not_reached_5_paddle_1=True
+    ball.not_reached_5_paddle_2=True
+    ball.not_reached_8_paddle_1=True
+    ball.not_reached_8_paddle_2=True
+
+
+
+
+
+
+
+
+
+
+
+
+##################### game function
 def game(screen,clock):
     #get a new random background
     random_background=reset_background()
     #create a font variable, so that the score can be updated every frame. Size of 32
     font=pygame.font.Font('freesansbold.ttf',32)
-    #player 1 and 2 scores as text to display
     running=True
     #the loop
     while running==True:
@@ -127,11 +174,14 @@ def game(screen,clock):
         #render the scores 
         player1_score_text=font.render('Player 1 Score:'+str(ball.player1_score),True,(255,255,255))
         player2_score_text=font.render('Player 2 Score:'+str(ball.player2_score),True,(255,255,255))
-        #draw the ball, paddles, and score text
+        #look for collisions between ball and paddle
         paddle_collision()
+        #draw the bal
         ball.draw(screen)
+        #blit the score text to the screen
         screen.blit(player1_score_text,(100,15))
         screen.blit(player2_score_text,(500,15))
+        #draw the paddles to the screen
         paddle1.draw(screen,ball)
         paddle2.draw(screen,ball)
         #get the key inputs and move the paddles accordingly
@@ -146,54 +196,79 @@ def game(screen,clock):
         #if the escape key is pressed, go to the menu
         if pygame.key.get_pressed()[pygame.K_ESCAPE]:
                     return 'Menu'
+        #quit the game
         for event in pygame.event.get():
             if event.type==pygame.QUIT:
                 running=False
+        #update the screen
         clock.tick(60)
         pygame.display.flip()
+        #run the update_paddle function (for powerups)
         adjust_paddle(ball.player1_score,ball.player2_score)
         #if the score of either player is 10, go to the game over screen and play a sound
         if ball.player1_score==10 or ball.player2_score==10:
             return 'Game Over'
-        #paddle collision function to use with ball
-        not_reached_5_paddle_1 = True
-        not_reached_8_paddle_1 = True
-        not_reached_5_paddle_2 = True
-        not_reached_8_paddle_2 = True
+      
+
+
+
+
+
+
+
+###### #paddle collision function to use with ball
 def paddle_collision():
+    #if the first paddle is colliding with the ball
     if paddle1.checkColiding(ball)=='collision paddle 1':
+        #make the ball move faster
        ball.vel_x=10
        ball.vel_y=10
+       #if the second paddle is colliding with the ball
     if paddle2.checkColiding(ball)=='collision paddle 2':
+        #make the ball faster
         ball.vel_x=-10
         ball.vel_y=-10
-        mixer.Sound.play(beep_sound)
 
-#adjust different parts of the paddle when a score is reached 
 
+
+
+
+
+#adjust different parts of the paddle when a score is reached, take in the scores
 def adjust_paddle(p1_score,p2_score):
+    #if the score of the first player is 5 and has not reached 5 already
     if p1_score ==5 and ball.not_reached_5_paddle_1:
+        #make the paddle bigger and play a sound
         paddle1.height=250
         mixer.Sound.play(powerup_sound,1)
+        #set the variable to false so the sound won't play forever
         ball.not_reached_5_paddle_1 = False
+    #if the score of the second player is 5 and has not reached 5 already
     if p2_score ==5 and ball.not_reached_5_paddle_2:
+        #make the paddle bigger and play a sound
         paddle2.height=250
         mixer.Sound.play(powerup_sound,1)
+        #set the variable to false so the sound won't play forever
         ball.not_reached_5_paddle_2 = False
+    #if the score of the first player is 8 and has not reached 8 already
     if p1_score ==8 and ball.not_reached_8_paddle_1:
+        #make the paddle smaller and play a sound
         paddle1.height=25
         mixer.Sound.play(powerup_sound,1)
         ball.not_reached_8_paddle_1 = False
+    #if the score of the second player is 8 and has not reached 8 already
     if p2_score ==8 and ball.not_reached_8_paddle_2:
+        #make the paddle smaller and play a sound
         paddle2.height=25
         mixer.Sound.play(powerup_sound,1)
+        #set the variable to false so the sound won't play forever
         ball.not_reached_8_paddle_2 = False
 
 
 
-#instructions screen
 
 
+###################instructions screen
 def instructions (screen, clock) : 
     #move the home button back to it's original location
     home_button=Button(300,450,(0,255,0),'Home',150,50)
