@@ -1,5 +1,7 @@
+#####    button.py
+
 import pygame
-#button class
+#################button class
 class Button:
     #init method with x,y,color,text,width,height. A rectangle uses pygame.rect, and text uses the text function
     def __init__(self,x,y,clr,txt,w,h):
@@ -12,6 +14,13 @@ class Button:
         self.rect=pygame.Rect(self.x,self.y,self.w,self.h)
         self.button_text=text(str(self.txt),self.x,self.y,25,(255,255,255))
         self.surf=pygame.surface.Surface((self.w,self.h))
+    
+
+
+
+
+
+
     #mouseMoved method to check for a collision with the mouse
     def mouseMoved(self):
         #get the mouse's position
@@ -26,6 +35,14 @@ class Button:
         else:
             self.clr=(255,0,255)
     #draw method for the main loop. screen is taken in so the button and text can be drawn
+
+
+
+
+
+
+
+
     def draw(self,screen):
         self.surf.fill(self.clr)
         #draw the rectangle on the screen
@@ -34,6 +51,12 @@ class Button:
         screen.blit(self.button_text,(self.x+35,self.y+5))
         #always run the mouseMoved method
         self.mouseMoved()
+
+
+
+
+
+
 #text function
 def text (txt,x,y,size,clr):
     #bring in screen variable

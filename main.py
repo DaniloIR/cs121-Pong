@@ -21,8 +21,16 @@ from functions import *
 #initilize pygame
 pygame.init()
 clock=pygame.time.Clock()
-### Global Variables
 
+
+
+
+
+
+
+
+
+####### Global Variables
 # Create the screen
 screen = pygame.display.set_mode((800, 600))
 #Set window title
@@ -35,21 +43,35 @@ running=True
 #title text
 #set game state to menu by default
 game_state='Menu'
+
+
+
+
+
+
+
+
+
 ######### the loop
 while running==True:
-    #window.blit(screen,(0,0))
+    #if the state is menu, run the menu function
     if game_state=='Menu':
         game_state=menu(screen,clock)
         clock.tick(60)
     if game_state=='Game':
+        #if the state is game, run the game function
         game_state=game(screen,clock)
         clock.tick(60)
     if game_state=='Instructions':
+        #if the state is instructions, run the instructions function
         game_state=instructions(screen,clock)
         clock.tick(60)
     if game_state=='Game Over':
+        #if the state is game over, run the game over function
         game_state=game_over(screen,clock)
+        clock.tick(60)
     for event in pygame.event.get():
+        #quit the game if the quit button is pressed
         if event.type==pygame.QUIT:
             running=False
     

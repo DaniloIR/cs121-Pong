@@ -5,6 +5,11 @@ from paddle import *
 from button import *
 from ball import *
 import random
+#import mixer so that sounds can be played
+from pygame import mixer
+
+
+
 
 
 ############# global variables
@@ -13,6 +18,13 @@ paddle1=Paddle(75,200,(255,0,0),10,100,1)
 paddle2=Paddle(750,200,(0,255,0),10,100,2)
 ball=Ball(400,200,(255,255,255),20)
 home_button=Button(300,450,(0,255,0),'Home',150,50)
+
+
+
+
+
+
+
 
 ######## background images
 bg1=pygame.image.load('Assets/Images/bg1.png')
@@ -33,8 +45,7 @@ def reset_background():
 
 
 
-#import mixer so that sounds can be played
-from pygame import mixer
+
 pygame.init()
 #load the sounds and music of the game
 beep_sound=mixer.Sound('Assets/Sounds/beep.wav')
@@ -186,13 +197,13 @@ def game(screen,clock):
         paddle2.draw(screen,ball)
         #get the key inputs and move the paddles accordingly
         if pygame.key.get_pressed()[pygame.K_w]:
-                    paddle1.y-=15
+                    paddle1.y-=8
         if pygame.key.get_pressed()[pygame.K_s]:
-                    paddle1.y+=15
+                    paddle1.y+=8
         if pygame.key.get_pressed()[pygame.K_o]:
-                    paddle2.y-=15
+                    paddle2.y-=8
         if pygame.key.get_pressed()[pygame.K_l]:
-                    paddle2.y+=15
+                    paddle2.y+=8
         #if the escape key is pressed, go to the menu
         if pygame.key.get_pressed()[pygame.K_ESCAPE]:
                     return 'Menu'
@@ -216,7 +227,7 @@ def game(screen,clock):
 
 
 
-###### #paddle collision function to use with ball
+############# #paddle collision function to use with ball
 def paddle_collision():
     #if the first paddle is colliding with the ball
     if paddle1.checkColiding(ball)=='collision paddle 1':
@@ -234,7 +245,13 @@ def paddle_collision():
 
 
 
-#adjust different parts of the paddle when a score is reached, take in the scores
+
+
+
+
+
+
+############adjust different parts of the paddle when a score is reached, take in the scores
 def adjust_paddle(p1_score,p2_score):
     #if the score of the first player is 5 and has not reached 5 already
     if p1_score ==5 and ball.not_reached_5_paddle_1:
@@ -268,11 +285,20 @@ def adjust_paddle(p1_score,p2_score):
 
 
 
+
+
+
+
+
+
+
+
 ###################instructions screen
 def instructions (screen, clock) : 
     #move the home button back to it's original location
     home_button=Button(300,450,(0,255,0),'Home',150,50)
     running=True
+    # rules text variables
     rules_txt_1 = text(' RULES: ', 5, 10, 25, (255, 255, 255))
     rules_txt_2 = text(' 1: Each player gets 1 paddle on each side of the screen. ', 5, 10, 25, (255, 255, 255))
     rules_txt_3 = text(' This can be controlled with either the (W & S) or (O and L) keys ', 5, 10, 25, (255, 255, 255))
@@ -285,7 +311,9 @@ def instructions (screen, clock) :
     rules_txt_10 = text(' Good Luck and Have Fun!!  ', 5, 10, 25, (255, 255, 255))
     rules_txt_11=text('Press escape in the game to go to the main menu',5,10,25,(255,255,255))
     while running ==True:
+        #game loop for instructions
         screen.fill((0,0,0))
+        #draw the button and each of the text for the rules
         home_button.draw(screen)
         screen.blit(rules_txt_1, (350, 10) )
         screen.blit(rules_txt_2, (5, 50) )
@@ -300,6 +328,7 @@ def instructions (screen, clock) :
         screen.blit(rules_txt_11,(5,360))
         pygame.display.update()
         clock.tick(60)
+        #update the game and get button presses
         for event in pygame.event.get():
             if event.type==pygame.QUIT:
                 running=False
@@ -309,7 +338,16 @@ def instructions (screen, clock) :
                     return 'Menu'
 
 
-#game over screen
+
+
+
+
+
+
+
+
+
+####################game over screen
 def game_over(screen,clock):
     #load the game ending music
     mixer.music.load('Assets/Sounds/Halo.wav')
