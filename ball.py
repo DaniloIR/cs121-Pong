@@ -1,9 +1,16 @@
 import pygame
 from pygame import mixer
 pygame.init()
-#ball class
+
+
+
+#Game Sounds
 beep_sound=mixer.Sound('Assets/Sounds/beep.wav')
 win_sound=mixer.Sound('Assets/Sounds//win.wav')
+
+
+
+#Ball Class
 class Ball:
     #init method, x, y, color, radius values are passed in
     def __init__(self,x,y,clr,r):
@@ -22,9 +29,20 @@ class Ball:
         self.not_reached_8_paddle_1 = True
         self.not_reached_5_paddle_2 = True
         self.not_reached_8_paddle_2 = True
+
+
+
+
+
+    #Function that updates the ball velocity
     def update(self):
         self.x+=self.vel_x
         self.y+=self.vel_y
+
+    
+
+
+
     #check edges method to check if the ball is off the screen, so the other player gets a point
     def checkEdges(self):
         if self.x>800:
@@ -45,6 +63,11 @@ class Ball:
         if self.y<20:
             self.vel_y*=-1
             mixer.Sound.play(beep_sound)
+
+
+
+
+    #Function that draws the ball on the screen
     def draw(self,screen):
         #fill the ball with the color, draw it, and run the other methods
         self.surf.fill(self.clr)

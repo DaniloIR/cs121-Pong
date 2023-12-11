@@ -1,6 +1,9 @@
 ##################paddle class
 #import pygame
 import pygame
+
+
+
 ####start of paddle class
 class Paddle:
     #x, y, color, width, height and id (id is the 1 for the left paddle and 2 for the right paddle)
@@ -17,13 +20,15 @@ class Paddle:
 
 
 
-     #checkedges method to make sure that paddles don't go off screen
+     #checkEdges method to make sure that paddles don't go off screen
     def checkEdges(self):
         #if the paddle reaches the top or bottom of screen, keep the location there
         if self.y>=495:
             self.y=495
         if self.y<=0:
             self.y=0
+
+
 
 
     #check for collision with ball
@@ -42,6 +47,8 @@ class Paddle:
                     return 'collision paddle 2'
         else:
             return 'not colliding'
+
+
 
 
 
